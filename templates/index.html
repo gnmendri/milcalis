@@ -1,1 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MILFIT — 52-WEEK CALISTHENICS PROGRAM</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0e;
+    --surface: #111416;
+    --surface2: #181c1f;
+    --border: #2a3038;
+    --accent: #c8a84b;
+    --accent2: #e8c56b;
+    --red: #c0392b;
+    --green: #27ae60;
+    --text: #d4d8dc;
+    --text-dim: #6b7580;
+    --text-bright: #f0f4f8;
+    --phase-color: #c8a84b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 2px solid var(--accent);
+    padding: 0 2rem;
+    background: linear-gradient(180deg, #0e1215 0%, var(--bg) 100%);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 20px rgba(200,168,75,0.4);
+  }
+  .logo span { color: var(--text-dim); font-size: 0.8rem; display: block; letter-spacing: 0.3em; margin-top: -6px; font-family: 'Share Tech Mono', monospace; }
+  
+  .header-status {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .status-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+  }
+  .status-pill.active { border-color: var(--green); color: var(--green); }
+  .status-pill.paused { border-color: var(--accent); color: var(--accent); }
+
+  /* MAIN LAYOUT */
+  .app-layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1.5rem;
+    min-height: calc(100vh - 70px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.2rem;
+  }
+  .panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+  }
+
+  /* WEEK SELECTOR */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 3px;
+    max-height: 240px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) var(--surface2);
+  }
+  .week-dot {
+    aspect-ratio: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    transition: all 0.15s;
+    position: relative;
+  }
+  .week-dot:hover { border-color: var(--accent); color: var(--accent); }
+  .week-dot.current { background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; }
+  .week-dot.completed { background: rgba(39,174,96,0.2); border-color: var(--green); color: var(--green); }
+  .week-dot.deload { border-color: #4a5568; }
+
+  /* CONTROLS */
+  .control-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  
+  .btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(200,168,75,0.05); }
+  .btn.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; }
+  .btn.primary:hover { background: var(--accent2); }
+  .btn.danger { border-color: var(--red); color: var(--red); }
+  .btn.danger:hover { background: rgba(192,57,43,0.1); }
+  .btn.success { border-color: var(--green); color: var(--green); }
+
+  .btn-row { display: flex; gap: 0.5rem; }
+  .btn-row .btn { flex: 1; }
+
+  /* DATE INPUT */
+  .date-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    width: 100%;
+    letter-spacing: 0.05em;
+  }
+  .date-input:focus { outline: none; border-color: var(--accent); }
+  label { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.15em; margin-bottom: 4px; display: block; }
+
+  /* STATS */
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.7rem;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--text-dim); letter-spacing: 0.1em; }
+  .stat-value { color: var(--accent); font-weight: bold; }
+  .stat-value.green { color: var(--green); }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap { 
+    background: var(--surface2); 
+    height: 6px; 
+    margin-top: 8px;
+    border: 1px solid var(--border);
+  }
+  .progress-bar-fill { 
+    height: 100%; 
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%); 
+    transition: width 0.5s ease;
+  }
+
+  /* MAIN CONTENT */
+  .main-content { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* WEEK HEADER */
+  .week-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.8rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .week-header::before {
+    content: attr(data-week);
+    position: absolute;
+    right: -10px;
+    top: -20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 10rem;
+    color: rgba(200,168,75,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .week-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 0.8rem;
+  }
+  .week-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .week-meta { display: flex; flex-direction: column; gap: 4px; }
+  .phase-tag {
+    background: rgba(200,168,75,0.15);
+    border: 1px solid rgba(200,168,75,0.3);
+    color: var(--accent);
+    padding: 2px 10px;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    display: inline-block;
+  }
+  .week-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.1em;
+    color: var(--text-bright);
+    line-height: 1;
+  }
+  .week-theme {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+  .week-desc {
+    font-size: 0.78rem;
+    color: var(--text);
+    line-height: 1.7;
+    max-width: 600px;
+    margin-top: 0.8rem;
+  }
+
+  /* NAV ARROWS */
+  .week-nav {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+  }
+  
+  /* CONTENT GRID */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+  }
+
+  /* EXERCISES */
+  .exercises-panel { }
+  .exercise-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.6rem;
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    transition: border-color 0.15s;
+    cursor: default;
+  }
+  .exercise-card:hover { border-color: rgba(200,168,75,0.4); }
+  .exercise-icon { font-size: 1.5rem; text-align: center; }
+  .exercise-name { 
+    font-family: 'Oswald', sans-serif; 
+    font-size: 1rem; 
+    font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 0.05em;
+  }
+  .exercise-muscle { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; margin-top: 2px; }
+  .exercise-stats {
+    display: flex;
+    gap: 1rem;
+    text-align: right;
+  }
+  .ex-stat { font-size: 0.65rem; }
+  .ex-stat-val { color: var(--accent); font-size: 1rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; display: block; }
+  .ex-stat-label { color: var(--text-dim); letter-spacing: 0.1em; }
+
+  /* RIGHT PANEL */
+  .right-panel { display: flex; flex-direction: column; gap: 1rem; }
+
+  /* CHART */
+  .chart-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.2rem;
+  }
+  canvas { width: 100% !important; }
+
+  /* TIPS BOX */
+  .tips-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.2rem;
+  }
+  .tips-header { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 0.6rem; }
+  .tips-text { font-size: 0.75rem; color: var(--text); line-height: 1.6; }
+
+  .goal-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    padding: 1rem 1.2rem;
+  }
+  .goal-header { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--green); margin-bottom: 0.6rem; }
+  .goal-text { font-size: 0.75rem; color: var(--text); line-height: 1.6; }
+
+  /* INTENSITY METER */
+  .intensity-display {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+  }
+  .intensity-bars {
+    display: flex;
+    gap: 4px;
+    margin-top: 0.8rem;
+    align-items: flex-end;
+    height: 40px;
+  }
+  .int-bar {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    transition: all 0.4s ease;
+  }
+  .int-bar.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px rgba(200,168,75,0.3); }
+  .int-bar.active.high { background: var(--red); border-color: var(--red); box-shadow: 0 0 8px rgba(192,57,43,0.3); }
+
+  /* PHOTO GRID */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .exercise-photo {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 2rem;
+    color: var(--text-dim);
+    position: relative;
+    overflow: hidden;
+  }
+  .exercise-photo::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.7);
+    padding: 4px 8px;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-align: center;
+  }
+
+  /* JUMP MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    padding: 2rem;
+    width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.8rem;
+  }
+  .jump-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    margin-bottom: 1.5rem;
+  }
+  .jump-item {
+    aspect-ratio: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-dim);
+  }
+  .jump-item:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+  .jump-item.current { background: rgba(200,168,75,0.2); border-color: var(--accent); color: var(--accent); }
+
+  /* NOTIFICATION */
+  .notif {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    padding: 12px 20px;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    z-index: 500;
+    transform: translateX(200%);
+    transition: transform 0.3s ease;
+  }
+  .notif.show { transform: translateX(0); }
+  .notif.success { border-color: var(--green); color: var(--green); }
+  .notif.warning { border-color: var(--accent); color: var(--accent); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+  /* Loading */
+  .loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+  }
+
+  @media (max-width: 1100px) {
+    .app-layout { grid-template-columns: 1fr; }
+    .content-grid { grid-template-columns: 1fr; }
+    .sidebar { flex-direction: row; flex-wrap: wrap; }
+    .sidebar .panel { flex: 1; min-width: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      MILFIT
+      <span>52-WEEK MILITARY CALISTHENICS PROGRAM</span>
+    </div>
+    <div class="header-status">
+      <div class="status-pill" id="programStatus">● NO START DATE SET</div>
+      <div class="status-pill" id="currentDateDisplay">—</div>
+    </div>
+  </div>
+</header>
+
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    
+    <!-- MISSION CONTROL -->
+    <div class="panel">
+      <div class="panel-title">◈ MISSION CONTROL</div>
+      <div class="control-group">
+        <label>START DATE</label>
+        <input type="date" class="date-input" id="startDateInput">
+        <div class="btn-row" style="margin-top:4px">
+          <button class="btn primary" onclick="setStartDate()">▶ DEPLOY</button>
+          <button class="btn danger" onclick="resetProgram()">✕ RESET</button>
+        </div>
+        <button class="btn" id="pauseBtn" onclick="togglePause()" style="margin-top:4px">⏸ PAUSE WEEK TIMER</button>
+      </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="panel">
+      <div class="panel-title">◈ NAVIGATION</div>
+      <div class="control-group">
+        <div class="btn-row">
+          <button class="btn" onclick="navigate(-1)">◀ PREV</button>
+          <button class="btn" onclick="navigate(1)">NEXT ▶</button>
+        </div>
+        <button class="btn" onclick="openJumpModal()">⊞ JUMP TO WEEK</button>
+        <button class="btn success" onclick="goToCurrentWeek()">⊙ CURRENT WEEK</button>
+      </div>
+    </div>
+
+    <!-- WEEK OVERVIEW MAP -->
+    <div class="panel">
+      <div class="panel-title">◈ PROGRAM MAP</div>
+      <div class="week-grid" id="weekGrid"></div>
+      <div style="margin-top:0.8rem">
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="mainProgressBar" style="width:0%"></div>
+        </div>
+        <div style="font-size:0.6rem; color:var(--text-dim); margin-top:4px; letter-spacing:0.1em">
+          PROGRAM COMPLETION: <span id="completionPct" style="color:var(--accent)">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="panel">
+      <div class="panel-title">◈ MISSION STATS</div>
+      <div class="stat-row">
+        <span class="stat-label">VIEWING WEEK</span>
+        <span class="stat-value" id="statViewWeek">—</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">ACTIVE WEEK</span>
+        <span class="stat-value green" id="statActiveWeek">—</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">DAYS ELAPSED</span>
+        <span class="stat-value" id="statDaysElapsed">—</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">PAUSE DAYS</span>
+        <span class="stat-value" id="statPauseDays">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">WEEKS REMAINING</span>
+        <span class="stat-value" id="statWeeksLeft">52</span>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+    <div class="loading-state">LOADING PROGRAM DATA...</div>
+  </main>
+
+</div>
+
+<!-- JUMP MODAL -->
+<div class="modal-overlay" id="jumpModal" onclick="closeJumpModal(event)">
+  <div class="modal">
+    <div class="modal-title">⊞ JUMP TO WEEK</div>
+    <div class="jump-grid" id="jumpGrid"></div>
+    <button class="btn danger" onclick="closeJumpModalForce()">✕ CANCEL</button>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// ===== STATE =====
+let state = {
+  currentViewWeek: 1,
+  startDate: null,
+  isPaused: false,
+  pauseStartDate: null,
+  totalPausedDays: 0,
+  weekData: {},
+  programOverview: [],
+};
+
+// Load from localStorage
+function loadState() {
+  try {
+    const saved = localStorage.getItem('milfit_state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state = { ...state, ...parsed };
+      if (state.startDate) state.startDate = new Date(state.startDate);
+      if (state.pauseStartDate) state.pauseStartDate = new Date(state.pauseStartDate);
+    }
+  } catch(e) {}
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('milfit_state', JSON.stringify(state));
+  } catch(e) {}
+}
+
+// ===== API =====
+async function fetchWeek(week) {
+  if (state.weekData[week]) return state.weekData[week];
+  const res = await fetch(`/api/week/${week}`);
+  const data = await res.json();
+  state.weekData[week] = data;
+  return data;
+}
+
+async function fetchOverview() {
+  if (state.programOverview.length) return state.programOverview;
+  const res = await fetch('/api/program/overview');
+  state.programOverview = await res.json();
+  return state.programOverview;
+}
+
+// ===== WEEK CALCULATION =====
+function getActiveWeek() {
+  if (!state.startDate) return null;
+  const now = new Date();
+  const start = new Date(state.startDate);
+  
+  let effectiveDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+  effectiveDays = Math.max(0, effectiveDays - state.totalPausedDays);
+  
+  // If currently paused, subtract ongoing pause
+  if (state.isPaused && state.pauseStartDate) {
+    const pausedOngoing = Math.floor((now - state.pauseStartDate) / (1000 * 60 * 60 * 24));
+    effectiveDays = Math.max(0, effectiveDays - pausedOngoing);
+  }
+  
+  const week = Math.floor(effectiveDays / 7) + 1;
+  return Math.min(52, Math.max(1, week));
+}
+
+function getDaysElapsed() {
+  if (!state.startDate) return 0;
+  const now = new Date();
+  return Math.max(0, Math.floor((now - state.startDate) / (1000 * 60 * 60 * 24)));
+}
+
+function getPausedDays() {
+  let total = state.totalPausedDays;
+  if (state.isPaused && state.pauseStartDate) {
+    const now = new Date();
+    total += Math.floor((now - new Date(state.pauseStartDate)) / (1000 * 60 * 60 * 24));
+  }
+  return total;
+}
+
+// ===== CONTROLS =====
+function setStartDate() {
+  const input = document.getElementById('startDateInput').value;
+  if (!input) { showNotif('SELECT A START DATE FIRST', 'warning'); return; }
+  state.startDate = new Date(input);
+  state.isPaused = false;
+  state.pauseStartDate = null;
+  state.totalPausedDays = 0;
+  saveState();
+  
+  const activeWeek = getActiveWeek();
+  state.currentViewWeek = activeWeek || 1;
+  
+  updateUI();
+  renderWeek(state.currentViewWeek);
+  showNotif('PROGRAM DEPLOYED — MISSION STARTED', 'success');
+}
+
+function resetProgram() {
+  if (!confirm('RESET ALL PROGRESS? THIS CANNOT BE UNDONE.')) return;
+  state.startDate = null;
+  state.isPaused = false;
+  state.pauseStartDate = null;
+  state.totalPausedDays = 0;
+  document.getElementById('startDateInput').value = '';
+  saveState();
+  updateUI();
+  showNotif('PROGRAM RESET', 'warning');
+}
+
+function togglePause() {
+  if (!state.startDate) { showNotif('SET A START DATE FIRST', 'warning'); return; }
+  
+  if (!state.isPaused) {
+    state.isPaused = true;
+    state.pauseStartDate = new Date();
+    document.getElementById('pauseBtn').textContent = '▶ RESUME TIMER';
+    document.getElementById('pauseBtn').classList.add('success');
+    showNotif('WEEK TIMER PAUSED', 'warning');
+  } else {
+    // Resume — accumulate paused days
+    if (state.pauseStartDate) {
+      const days = Math.floor((new Date() - new Date(state.pauseStartDate)) / (1000 * 60 * 60 * 24));
+      state.totalPausedDays += days;
+    }
+    state.isPaused = false;
+    state.pauseStartDate = null;
+    document.getElementById('pauseBtn').textContent = '⏸ PAUSE WEEK TIMER';
+    document.getElementById('pauseBtn').classList.remove('success');
+    showNotif('TIMER RESUMED', 'success');
+  }
+  saveState();
+  updateUI();
+}
+
+function navigate(dir) {
+  const newWeek = state.currentViewWeek + dir;
+  if (newWeek < 1 || newWeek > 52) return;
+  state.currentViewWeek = newWeek;
+  renderWeek(newWeek);
+  updateWeekGrid();
+}
+
+function goToCurrentWeek() {
+  const active = getActiveWeek();
+  if (!active) { showNotif('NO ACTIVE WEEK — SET START DATE', 'warning'); return; }
+  state.currentViewWeek = active;
+  renderWeek(active);
+  updateWeekGrid();
+}
+
+function openJumpModal() {
+  document.getElementById('jumpModal').classList.add('open');
+  buildJumpGrid();
+}
+
+function buildJumpGrid() {
+  const grid = document.getElementById('jumpGrid');
+  grid.innerHTML = '';
+  const active = getActiveWeek();
+  for (let w = 1; w <= 52; w++) {
+    const item = document.createElement('div');
+    item.className = 'jump-item' + (w === state.currentViewWeek ? ' current' : '');
+    item.textContent = w;
+    item.onclick = () => {
+      state.currentViewWeek = w;
+      renderWeek(w);
+      updateWeekGrid();
+      closeJumpModalForce();
+    };
+    grid.appendChild(item);
+  }
+}
+
+function closeJumpModal(e) {
+  if (e.target === document.getElementById('jumpModal')) closeJumpModalForce();
+}
+function closeJumpModalForce() {
+  document.getElementById('jumpModal').classList.remove('open');
+}
+
+// ===== UI UPDATES =====
+function updateUI() {
+  const active = getActiveWeek();
+  const daysElapsed = getDaysElapsed();
+  const pausedDays = getPausedDays();
+  const weeksLeft = active ? Math.max(0, 52 - active + 1) : 52;
+  const pct = active ? Math.round(((active - 1) / 52) * 100) : 0;
+
+  // Status pill
+  const statusEl = document.getElementById('programStatus');
+  if (!state.startDate) {
+    statusEl.className = 'status-pill';
+    statusEl.textContent = '● NO START DATE SET';
+  } else if (state.isPaused) {
+    statusEl.className = 'status-pill paused';
+    statusEl.textContent = '⏸ PROGRAM PAUSED';
+  } else {
+    statusEl.className = 'status-pill active';
+    statusEl.textContent = `● ACTIVE — WEEK ${active}`;
+  }
+
+  // Date display
+  const dateEl = document.getElementById('currentDateDisplay');
+  dateEl.textContent = new Date().toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'}).toUpperCase();
+
+  // Stats
+  document.getElementById('statViewWeek').textContent = state.currentViewWeek;
+  document.getElementById('statActiveWeek').textContent = active || '—';
+  document.getElementById('statDaysElapsed').textContent = state.startDate ? daysElapsed : '—';
+  document.getElementById('statPauseDays').textContent = pausedDays;
+  document.getElementById('statWeeksLeft').textContent = weeksLeft;
+
+  // Progress
+  document.getElementById('mainProgressBar').style.width = pct + '%';
+  document.getElementById('completionPct').textContent = pct + '%';
+
+  // Pause button
+  const pauseBtn = document.getElementById('pauseBtn');
+  if (state.isPaused) {
+    pauseBtn.textContent = '▶ RESUME TIMER';
+    pauseBtn.classList.add('success');
+  } else {
+    pauseBtn.textContent = '⏸ PAUSE WEEK TIMER';
+    pauseBtn.classList.remove('success');
+  }
+
+  // Start date input
+  if (state.startDate) {
+    const d = new Date(state.startDate);
+    document.getElementById('startDateInput').value = d.toISOString().split('T')[0];
+  }
+
+  updateWeekGrid();
+}
+
+function updateWeekGrid() {
+  const active = getActiveWeek();
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = '';
+  for (let w = 1; w <= 52; w++) {
+    const dot = document.createElement('div');
+    let cls = 'week-dot';
+    if (w === state.currentViewWeek) cls += ' current';
+    else if (active && w < active) cls += ' completed';
+    if (w % 4 === 0) cls += ' deload';
+    dot.className = cls;
+    dot.textContent = w;
+    dot.title = `Week ${w}${w % 4 === 0 ? ' (DELOAD)' : ''}`;
+    dot.onclick = () => {
+      state.currentViewWeek = w;
+      renderWeek(w);
+      updateWeekGrid();
+    };
+    grid.appendChild(dot);
+  }
+}
+
+// ===== RENDER WEEK =====
+let volumeChart = null;
+
+async function renderWeek(week) {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div class="loading-state">LOADING WEEK ' + week + ' DATA...</div>';
+  
+  const [data, overview] = await Promise.all([fetchWeek(week), fetchOverview()]);
+  
+  const activeWeek = getActiveWeek();
+  const isCurrentActive = activeWeek === week;
+  
+  // Build exercises HTML
+  const exercisesHTML = data.exercises.map(ex => `
+    <div class="exercise-card">
+      <div class="exercise-icon">${ex.icon}</div>
+      <div>
+        <div class="exercise-name">${ex.name}</div>
+        <div class="exercise-muscle">${ex.muscle}</div>
+      </div>
+      <div class="exercise-stats">
+        <div class="ex-stat">
+          <span class="ex-stat-val">${ex.sets}</span>
+          <span class="ex-stat-label">SETS</span>
+        </div>
+        <div class="ex-stat">
+          <span class="ex-stat-val">${ex.reps}</span>
+          <span class="ex-stat-label">REPS</span>
+        </div>
+        <div class="ex-stat">
+          <span class="ex-stat-val">${ex.rest}</span>
+          <span class="ex-stat-label">REST</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Exercise visuals (ASCII-art style SVG representations)
+  const exerciseVisuals = data.exercises.slice(0, 4).map((ex, i) => `
+    <div class="exercise-photo" data-label="${ex.name.toUpperCase()}">
+      ${generateExerciseSVG(ex.name, ex.icon)}
+    </div>
+  `).join('');
+
+  // Intensity bars
+  const intBars = Array.from({length: 10}, (_, i) => {
+    const active = i < data.intensity;
+    const high = i >= 7 && active;
+    return `<div class="int-bar ${active ? 'active' : ''} ${high ? 'high' : ''}" style="height:${30 + i * 4}px"></div>`;
+  }).join('');
+
+  main.innerHTML = `
+    <div class="week-header" data-week="${String(week).padStart(2,'0')}">
+      <div class="week-badge">
+        <div class="week-num">W${String(week).padStart(2,'0')}</div>
+        <div class="week-meta">
+          <span class="phase-tag">${data.phase}</span>
+          ${isCurrentActive ? '<span class="phase-tag" style="border-color:var(--green);background:rgba(39,174,96,0.15);color:var(--green);margin-top:4px">◉ YOUR CURRENT WEEK</span>' : ''}
+        </div>
+      </div>
+      <div class="week-title">${data.title}</div>
+      <div class="week-theme">"${data.theme}"</div>
+      <div class="week-desc">${data.description}</div>
+      <div class="week-nav">
+        <button class="btn" onclick="navigate(-1)" ${week === 1 ? 'disabled style="opacity:0.3"' : ''}>◀ PREVIOUS WEEK</button>
+        <button class="btn" onclick="navigate(1)" ${week === 52 ? 'disabled style="opacity:0.3"' : ''}>NEXT WEEK ▶</button>
+        ${activeWeek && activeWeek !== week ? `<button class="btn success" onclick="goToCurrentWeek()">⊙ GO TO WEEK ${activeWeek}</button>` : ''}
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div>
+        <div class="panel-title" style="margin-bottom:0.8rem">◈ TRAINING PROTOCOL — ${data.exercises.length} EXERCISES</div>
+        ${exercisesHTML}
+        
+        <div style="margin-top:1rem">
+          <div class="panel-title" style="margin-bottom:0.8rem">◈ EXERCISE REFERENCE</div>
+          <div class="photo-grid">${exerciseVisuals}</div>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div class="chart-container">
+          <div class="panel-title">◈ WEEKLY VOLUME PROGRESSION</div>
+          <canvas id="volumeChart" height="160"></canvas>
+        </div>
+
+        <div class="intensity-display">
+          <div class="panel-title">◈ INTENSITY LEVEL — ${data.intensity}/10</div>
+          <div class="intensity-bars">${intBars}</div>
+        </div>
+
+        <div class="chart-container">
+          <div class="panel-title">◈ MUSCLE GROUP DISTRIBUTION</div>
+          <canvas id="muscleChart" height="180"></canvas>
+        </div>
+
+        <div class="tips-box">
+          <div class="tips-header">◈ TRAINER TIP</div>
+          <div class="tips-text">${data.tips}</div>
+        </div>
+
+        <div class="goal-box">
+          <div class="goal-header">◈ WEEKLY MISSION</div>
+          <div class="goal-text">${data.weekly_goal}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Render charts
+  renderVolumeChart(week, overview);
+  renderMuscleChart(data.exercises);
+  updateWeekGrid();
+  updateUI();
+}
+
+function generateExerciseSVG(name, icon) {
+  // Generate a simple SVG stick figure doing the exercise
+  const n = name.toLowerCase();
+  let svg = '';
+  
+  if (n.includes('push') || n.includes('plank')) {
+    svg = `<svg viewBox="0 0 80 60" style="width:70px;height:50px;opacity:0.7">
+      <circle cx="65" cy="12" r="6" fill="#c8a84b" stroke="none"/>
+      <line x1="65" y1="18" x2="65" y2="35" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="50" y1="20" x2="80" y2="20" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="65" y1="35" x2="50" y2="48" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="65" y1="35" x2="80" y2="48" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="10" y1="48" x2="80" y2="48" stroke="#2a3038" stroke-width="1"/>
+    </svg>`;
+  } else if (n.includes('squat') || n.includes('lunge')) {
+    svg = `<svg viewBox="0 0 80 70" style="width:70px;height:55px;opacity:0.7">
+      <circle cx="40" cy="10" r="7" fill="#c8a84b"/>
+      <line x1="40" y1="17" x2="40" y2="35" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="28" y1="22" x2="52" y2="22" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="40" y1="35" x2="28" y2="55" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="40" y1="35" x2="52" y2="55" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="28" y1="55" x2="22" y2="65" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="52" y1="55" x2="58" y2="65" stroke="#c8a84b" stroke-width="2.5"/>
+    </svg>`;
+  } else if (n.includes('run') || n.includes('sprint') || n.includes('burpee')) {
+    svg = `<svg viewBox="0 0 80 70" style="width:70px;height:55px;opacity:0.7">
+      <circle cx="55" cy="10" r="7" fill="#c8a84b"/>
+      <line x1="55" y1="17" x2="48" y2="35" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="35" y1="22" x2="58" y2="18" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="48" y1="35" x2="35" y2="55" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="48" y1="35" x2="60" y2="50" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="35" y1="55" x2="25" y2="65" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="60" y1="50" x2="68" y2="62" stroke="#c8a84b" stroke-width="2.5"/>
+    </svg>`;
+  } else {
+    svg = `<svg viewBox="0 0 80 70" style="width:70px;height:55px;opacity:0.7">
+      <circle cx="40" cy="8" r="7" fill="#c8a84b"/>
+      <line x1="40" y1="15" x2="40" y2="40" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="25" y1="22" x2="55" y2="22" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="40" y1="40" x2="30" y2="60" stroke="#c8a84b" stroke-width="2.5"/>
+      <line x1="40" y1="40" x2="50" y2="60" stroke="#c8a84b" stroke-width="2.5"/>
+    </svg>`;
+  }
+  return svg + `<span style="font-size:1.8rem">${icon}</span>`;
+}
+
+function renderVolumeChart(currentWeek, overview) {
+  const ctx = document.getElementById('volumeChart');
+  if (!ctx) return;
+
+  if (volumeChart) volumeChart.destroy();
+
+  const start = Math.max(1, currentWeek - 6);
+  const end = Math.min(52, currentWeek + 5);
+  const weeks = overview.slice(start - 1, end);
+
+  volumeChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: weeks.map(w => `W${w.week}`),
+      datasets: [{
+        label: 'Volume',
+        data: weeks.map(w => w.volume),
+        backgroundColor: weeks.map(w => w.week === currentWeek ? 'rgba(200,168,75,0.9)' : 'rgba(200,168,75,0.25)'),
+        borderColor: weeks.map(w => w.week === currentWeek ? '#c8a84b' : 'rgba(200,168,75,0.4)'),
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#181c1f', titleColor: '#c8a84b', bodyColor: '#d4d8dc', borderColor: '#2a3038', borderWidth: 1 } },
+      scales: {
+        x: { ticks: { color: '#6b7580', font: { family: 'Share Tech Mono', size: 9 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { ticks: { color: '#6b7580', font: { family: 'Share Tech Mono', size: 9 } }, grid: { color: 'rgba(255,255,255,0.04)' } }
+      }
+    }
+  });
+}
+
+function renderMuscleChart(exercises) {
+  const ctx = document.getElementById('muscleChart');
+  if (!ctx) return;
+
+  const groups = { 'CHEST': 0, 'LEGS': 0, 'CORE': 0, 'BACK': 0, 'SHOULDERS': 0, 'CARDIO': 0 };
+  exercises.forEach(ex => {
+    const m = ex.muscle.toUpperCase();
+    if (m.includes('CHEST') || m.includes('PUSH') || m.includes('TRICEP')) groups.CHEST++;
+    if (m.includes('LEG') || m.includes('QUAD') || m.includes('GLUTE') || m.includes('SQUAT') || m.includes('LUNGE')) groups.LEGS++;
+    if (m.includes('CORE') || m.includes('ABS') || m.includes('PLANK') || m.includes('SIT')) groups.CORE++;
+    if (m.includes('BACK') || m.includes('ROW') || m.includes('PULL') || m.includes('BICEP')) groups.BACK++;
+    if (m.includes('SHOULDER') || m.includes('DELT') || m.includes('PRESS')) groups.SHOULDERS++;
+    if (m.includes('CARDIO') || m.includes('RUN') || m.includes('SPRINT') || m.includes('FULL BODY')) groups.CARDIO++;
+  });
+
+  const labels = Object.keys(groups).filter(k => groups[k] > 0);
+  const values = labels.map(k => groups[k]);
+
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: ['rgba(200,168,75,0.8)', 'rgba(39,174,96,0.8)', 'rgba(52,152,219,0.8)', 'rgba(155,89,182,0.8)', 'rgba(231,76,60,0.8)', 'rgba(230,126,34,0.8)'],
+        borderColor: '#0a0c0e',
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#6b7580', font: { family: 'Share Tech Mono', size: 8 }, padding: 8, boxWidth: 10 } },
+        tooltip: { backgroundColor: '#181c1f', titleColor: '#c8a84b', bodyColor: '#d4d8dc' }
+      }
+    }
+  });
+}
+
+// ===== NOTIFICATION =====
+let notifTimer;
+function showNotif(msg, type = 'warning') {
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.className = `notif ${type} show`;
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ===== INIT =====
+async function init() {
+  loadState();
+  await fetchOverview();
+  updateUI();
+  
+  // Set default view to active week or week 1
+  const active = getActiveWeek();
+  state.currentViewWeek = active || state.currentViewWeek || 1;
+  
+  renderWeek(state.currentViewWeek);
+  
+  // Update time every minute
+  setInterval(() => {
+    updateUI();
+  }, 60000);
+}
+
+init();
+</script>
+</body>
+</html>
