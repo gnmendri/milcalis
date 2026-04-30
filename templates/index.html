@@ -3,1137 +3,924 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MILFIT — 52-WEEK CALISTHENICS PROGRAM</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>IRON 52 — Military Fitness Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0c0e;
-    --surface: #111416;
-    --surface2: #181c1f;
-    --border: #2a3038;
+    --bg: #0d0f12;
+    --bg2: #141720;
+    --bg3: #1c2028;
+    --bg4: #242830;
     --accent: #c8a84b;
-    --accent2: #e8c56b;
+    --accent2: #e6c96a;
     --red: #c0392b;
     --green: #27ae60;
-    --text: #d4d8dc;
-    --text-dim: #6b7580;
-    --text-bright: #f0f4f8;
-    --phase-color: #c8a84b;
+    --text: #e8e4d8;
+    --text2: #9a9488;
+    --text3: #5a5650;
+    --border: rgba(200,168,75,0.15);
+    --border2: rgba(200,168,75,0.3);
+    --phase-conditioning: #4a90d9;
+    --phase-strength: #e67e22;
+    --phase-endurance: #c0392b;
+    --phase-power: #8e44ad;
+    --phase-advanced: #16a085;
+    --phase-peak: #c0392b;
+    --phase-specialization: #d35400;
+    --phase-integration: #27ae60;
+    --phase-elite: #c8a84b;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Share Tech Mono', monospace;
+    font-family: 'Barlow', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
   }
 
-  /* SCANLINE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  /* HEADER */
+  /* ── HEADER ── */
   header {
-    border-bottom: 2px solid var(--accent);
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
     padding: 0 2rem;
-    background: linear-gradient(180deg, #0e1215 0%, var(--bg) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 200;
   }
-  .header-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 70px;
-  }
+
   .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
     color: var(--accent);
-    letter-spacing: 0.15em;
-    text-shadow: 0 0 20px rgba(200,168,75,0.4);
+    text-transform: uppercase;
   }
-  .logo span { color: var(--text-dim); font-size: 0.8rem; display: block; letter-spacing: 0.3em; margin-top: -6px; font-family: 'Share Tech Mono', monospace; }
-  
-  .header-status {
+  .logo span { color: var(--text2); font-weight: 400; font-size: 0.9rem; letter-spacing: 0.06em; display: block; margin-top: -4px; }
+
+  .header-right {
     display: flex;
     align-items: center;
-    gap: 2rem;
-  }
-  .status-pill {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 6px 16px;
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    color: var(--text-dim);
-  }
-  .status-pill.active { border-color: var(--green); color: var(--green); }
-  .status-pill.paused { border-color: var(--accent); color: var(--accent); }
-
-  /* MAIN LAYOUT */
-  .app-layout {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 1.5rem 2rem;
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 1.5rem;
-    min-height: calc(100vh - 70px);
-  }
-
-  /* SIDEBAR */
-  .sidebar {
-    display: flex;
-    flex-direction: column;
     gap: 1rem;
   }
 
-  .panel {
-    background: var(--surface);
+  .week-badge {
+    background: var(--bg3);
     border: 1px solid var(--border);
-    padding: 1.2rem;
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text2);
+    text-transform: uppercase;
   }
-  .panel-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 0.2em;
-    color: var(--accent);
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0.5rem;
+  .week-badge strong { color: var(--accent); }
+
+  /* ── LAYOUT ── */
+  .app {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: calc(100vh - 64px);
   }
 
-  /* WEEK SELECTOR */
-  .week-grid {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 3px;
-    max-height: 240px;
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent) var(--surface2);
+    height: calc(100vh - 64px);
+    position: sticky;
+    top: 64px;
   }
-  .week-dot {
-    aspect-ratio: 1;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    cursor: pointer;
+
+  .sidebar-header {
+    padding: 1rem 1.25rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+
+  .phase-group { margin-bottom: 4px; }
+
+  .phase-label {
+    padding: 8px 1.25rem 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  .week-btn {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 0.5rem;
-    color: var(--text-dim);
-    transition: all 0.15s;
-    position: relative;
-  }
-  .week-dot:hover { border-color: var(--accent); color: var(--accent); }
-  .week-dot.current { background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; }
-  .week-dot.completed { background: rgba(39,174,96,0.2); border-color: var(--green); color: var(--green); }
-  .week-dot.deload { border-color: #4a5568; }
-
-  /* CONTROLS */
-  .control-group { display: flex; flex-direction: column; gap: 0.5rem; }
-  
-  .btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 10px 16px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
+    gap: 10px;
+    width: 100%;
+    padding: 7px 1.25rem;
+    background: none;
+    border: none;
     cursor: pointer;
     text-align: left;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    transition: background 0.15s;
+    border-left: 2px solid transparent;
   }
-  .btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(200,168,75,0.05); }
-  .btn.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: bold; }
-  .btn.primary:hover { background: var(--accent2); }
-  .btn.danger { border-color: var(--red); color: var(--red); }
-  .btn.danger:hover { background: rgba(192,57,43,0.1); }
-  .btn.success { border-color: var(--green); color: var(--green); }
+  .week-btn:hover { background: var(--bg3); }
+  .week-btn.active {
+    background: var(--bg3);
+    border-left-color: var(--accent);
+  }
 
-  .btn-row { display: flex; gap: 0.5rem; }
-  .btn-row .btn { flex: 1; }
-
-  /* DATE INPUT */
-  .date-input {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 12px;
-    font-family: 'Share Tech Mono', monospace;
+  .week-num {
+    font-family: 'Barlow Condensed', sans-serif;
     font-size: 0.75rem;
-    width: 100%;
+    font-weight: 700;
+    color: var(--text3);
+    min-width: 26px;
     letter-spacing: 0.05em;
   }
-  .date-input:focus { outline: none; border-color: var(--accent); }
-  label { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.15em; margin-bottom: 4px; display: block; }
+  .week-btn.active .week-num { color: var(--accent); }
 
-  /* STATS */
-  .stat-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 0.7rem;
-  }
-  .stat-row:last-child { border-bottom: none; }
-  .stat-label { color: var(--text-dim); letter-spacing: 0.1em; }
-  .stat-value { color: var(--accent); font-weight: bold; }
-  .stat-value.green { color: var(--green); }
-
-  /* PROGRESS BAR */
-  .progress-bar-wrap { 
-    background: var(--surface2); 
-    height: 6px; 
-    margin-top: 8px;
-    border: 1px solid var(--border);
-  }
-  .progress-bar-fill { 
-    height: 100%; 
-    background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%); 
-    transition: width 0.5s ease;
-  }
-
-  /* MAIN CONTENT */
-  .main-content { display: flex; flex-direction: column; gap: 1.5rem; }
-
-  /* WEEK HEADER */
-  .week-header {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 1.8rem 2rem;
-    position: relative;
+  .week-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text2);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .week-header::before {
-    content: attr(data-week);
-    position: absolute;
-    right: -10px;
-    top: -20px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 10rem;
-    color: rgba(200,168,75,0.06);
-    line-height: 1;
-    pointer-events: none;
+  .week-btn.active .week-title { color: var(--text); }
+
+  .intensity-dot {
+    margin-left: auto;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
-  .week-badge {
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    padding: 2rem;
+    max-width: 900px;
+  }
+
+  /* ── WEEK HERO ── */
+  .week-hero {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .week-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 0.8rem;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
-  .week-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    color: var(--accent);
+
+  .tag-week { background: rgba(200,168,75,0.12); color: var(--accent); border: 1px solid rgba(200,168,75,0.3); }
+  .tag-phase { border: 1px solid; }
+
+  .week-title-main {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
     line-height: 1;
-  }
-  .week-meta { display: flex; flex-direction: column; gap: 4px; }
-  .phase-tag {
-    background: rgba(200,168,75,0.15);
-    border: 1px solid rgba(200,168,75,0.3);
-    color: var(--accent);
-    padding: 2px 10px;
-    font-size: 0.6rem;
-    letter-spacing: 0.25em;
-    display: inline-block;
-  }
-  .week-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
-    letter-spacing: 0.1em;
-    color: var(--text-bright);
-    line-height: 1;
-  }
-  .week-theme {
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    font-style: italic;
-    margin-top: 0.5rem;
-    letter-spacing: 0.05em;
-  }
-  .week-desc {
-    font-size: 0.78rem;
+    letter-spacing: 0.06em;
     color: var(--text);
-    line-height: 1.7;
-    max-width: 600px;
-    margin-top: 0.8rem;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
   }
 
-  /* NAV ARROWS */
-  .week-nav {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1.2rem;
+  .week-theme {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
   }
-  
-  /* CONTENT GRID */
-  .content-grid {
+
+  .week-desc {
+    font-size: 0.95rem;
+    color: var(--text2);
+    line-height: 1.65;
+    max-width: 680px;
+  }
+
+  /* ── STATS ROW ── */
+  .stats-row {
     display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
   }
 
-  /* EXERCISES */
-  .exercises-panel { }
-  .exercise-card {
-    background: var(--surface);
+  .stat-card {
+    background: var(--bg2);
     border: 1px solid var(--border);
-    padding: 1rem 1.2rem;
-    margin-bottom: 0.6rem;
-    display: grid;
-    grid-template-columns: 40px 1fr auto;
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+  }
+
+  .stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-sub {
+    font-size: 0.75rem;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+
+  .intensity-bar {
+    display: flex;
+    gap: 3px;
+    margin-top: 6px;
+  }
+
+  .intensity-seg {
+    height: 4px;
+    flex: 1;
+    border-radius: 2px;
+    background: var(--bg4);
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── EXERCISE LIST ── */
+  .exercise-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 2rem;
+  }
+
+  .ex-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
     align-items: center;
     gap: 1rem;
-    transition: border-color 0.15s;
+    padding: 14px 16px;
+    position: relative;
+    transition: border-color 0.15s, background 0.15s;
     cursor: default;
   }
-  .exercise-card:hover { border-color: rgba(200,168,75,0.4); }
-  .exercise-icon { font-size: 1.5rem; text-align: center; }
-  .exercise-name { 
-    font-family: 'Oswald', sans-serif; 
-    font-size: 1rem; 
+  .ex-card:hover { border-color: var(--border2); background: var(--bg3); }
+
+  .ex-icon {
+    font-size: 1.4rem;
+    width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .ex-info { flex: 1; min-width: 0; }
+
+  .ex-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .ex-muscle {
+    font-size: 0.78rem;
+    color: var(--text3);
+    letter-spacing: 0.02em;
+  }
+
+  .ex-metrics {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .metric-pill {
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
     font-weight: 600;
-    color: var(--text-bright);
-    letter-spacing: 0.05em;
+    color: var(--text2);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
-  .exercise-muscle { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; margin-top: 2px; }
-  .exercise-stats {
+
+  .metric-pill.sets { color: var(--accent); border-color: rgba(200,168,75,0.2); background: rgba(200,168,75,0.06); }
+
+  /* ── INFO BUTTON ── */
+  .info-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text3);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
     display: flex;
-    gap: 1rem;
-    text-align: right;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    user-select: none;
+    letter-spacing: 0;
   }
-  .ex-stat { font-size: 0.65rem; }
-  .ex-stat-val { color: var(--accent); font-size: 1rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; display: block; }
-  .ex-stat-label { color: var(--text-dim); letter-spacing: 0.1em; }
-
-  /* RIGHT PANEL */
-  .right-panel { display: flex; flex-direction: column; gap: 1rem; }
-
-  /* CHART */
-  .chart-container {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 1.2rem;
+  .info-btn:hover, .info-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
   }
-  canvas { width: 100% !important; }
 
-  /* TIPS BOX */
-  .tips-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    padding: 1rem 1.2rem;
+  /* ── POPOVER ── */
+  .popover {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: calc(100% + 8px);
+    width: 420px;
+    z-index: 100;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 16px 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    animation: fadeIn 0.12s ease;
   }
-  .tips-header { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 0.6rem; }
-  .tips-text { font-size: 0.75rem; color: var(--text); line-height: 1.6; }
 
-  .goal-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--green);
-    padding: 1rem 1.2rem;
-  }
-  .goal-header { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--green); margin-bottom: 0.6rem; }
-  .goal-text { font-size: 0.75rem; color: var(--text); line-height: 1.6; }
+  .popover.open { display: block; }
 
-  /* INTENSITY METER */
-  .intensity-display {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 1rem 1.2rem;
-  }
-  .intensity-bars {
+  /* keep popover on screen if card is near right edge */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .popover-header {
     display: flex;
-    gap: 4px;
-    margin-top: 0.8rem;
-    align-items: flex-end;
-    height: 40px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 8px;
   }
-  .int-bar {
-    flex: 1;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    transition: all 0.4s ease;
-  }
-  .int-bar.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px rgba(200,168,75,0.3); }
-  .int-bar.active.high { background: var(--red); border-color: var(--red); box-shadow: 0 0 8px rgba(192,57,43,0.3); }
 
-  /* PHOTO GRID */
-  .photo-grid {
+  .popover-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  .popover-muscle {
+    font-size: 0.75rem;
+    color: var(--text3);
+    letter-spacing: 0.03em;
+  }
+
+  .popover-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 0 10px;
+  }
+
+  .popover-steps {
+    list-style: none;
+    margin: 0 0 12px;
+    padding: 0;
+  }
+
+  .popover-steps li {
+    display: flex;
+    gap: 10px;
+    font-size: 0.83rem;
+    color: var(--text2);
+    line-height: 1.5;
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .popover-steps li:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 16px;
+    padding-top: 1px;
+    letter-spacing: 0.04em;
+  }
+
+  .video-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid rgba(200,168,75,0.3);
+    border-radius: 4px;
+    padding: 5px 12px;
+    transition: all 0.15s;
+  }
+  .video-link:hover {
+    background: rgba(200,168,75,0.1);
+    border-color: var(--accent);
+  }
+
+  .video-icon {
+    width: 14px;
+    height: 14px;
+    background: var(--accent);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .video-icon::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 3.5px 0 3.5px 6px;
+    border-color: transparent transparent transparent var(--bg);
+    margin-left: 1px;
+  }
+
+  /* ── TIPS + GOAL ── */
+  .bottom-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-  }
-  .exercise-photo {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    aspect-ratio: 4/3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 8px;
-    font-size: 2rem;
-    color: var(--text-dim);
-    position: relative;
-    overflow: hidden;
-  }
-  .exercise-photo::after {
-    content: attr(data-label);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0,0,0,0.7);
-    padding: 4px 8px;
-    font-size: 0.55rem;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-    text-align: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
   }
 
-  /* JUMP MODAL */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 1000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--accent);
-    padding: 2rem;
-    width: 400px;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  .modal-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    color: var(--accent);
-    letter-spacing: 0.2em;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0.8rem;
-  }
-  .jump-grid {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 4px;
-    margin-bottom: 1.5rem;
-  }
-  .jump-item {
-    aspect-ratio: 1;
-    background: var(--surface2);
+  .info-box {
+    background: var(--bg2);
     border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+  }
+
+  .info-box-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .info-box p {
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.55;
+  }
+
+  /* ── NAV BUTTONS ── */
+  .week-nav {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-btn {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 0.6rem;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text2);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     cursor: pointer;
     transition: all 0.15s;
-    color: var(--text-dim);
   }
-  .jump-item:hover { background: var(--accent); color: #000; border-color: var(--accent); }
-  .jump-item.current { background: rgba(200,168,75,0.2); border-color: var(--accent); color: var(--accent); }
-
-  /* NOTIFICATION */
-  .notif {
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    background: var(--surface);
-    border: 1px solid var(--accent);
-    padding: 12px 20px;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    z-index: 500;
-    transform: translateX(200%);
-    transition: transform 0.3s ease;
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,168,75,0.06);
   }
-  .notif.show { transform: translateX(0); }
-  .notif.success { border-color: var(--green); color: var(--green); }
-  .notif.warning { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
 
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--surface); }
-  ::-webkit-scrollbar-thumb { background: var(--accent); }
+  .nav-btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+    margin-left: auto;
+  }
+  .nav-btn.primary:hover:not(:disabled) {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: var(--bg);
+  }
 
-  /* Loading */
-  .loading-state {
+  /* ── LOADING ── */
+  .loading {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 3rem;
-    color: var(--text-dim);
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
+    height: 300px;
+    gap: 1rem;
+    color: var(--text3);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
   }
 
-  @media (max-width: 1100px) {
-    .app-layout { grid-template-columns: 1fr; }
-    .content-grid { grid-template-columns: 1fr; }
-    .sidebar { flex-direction: row; flex-wrap: wrap; }
-    .sidebar .panel { flex: 1; min-width: 200px; }
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── SCROLLBAR ── */
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: var(--bg2); }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
+
+  /* ── PHASE COLORS ── */
+  .phase-CONDITIONING { color: var(--phase-conditioning); border-color: rgba(74,144,217,0.35); background: rgba(74,144,217,0.08); }
+  .phase-STRENGTH { color: var(--phase-strength); border-color: rgba(230,126,34,0.35); background: rgba(230,126,34,0.08); }
+  .phase-ENDURANCE { color: var(--phase-endurance); border-color: rgba(192,57,43,0.35); background: rgba(192,57,43,0.08); }
+  .phase-POWER { color: var(--phase-power); border-color: rgba(142,68,173,0.35); background: rgba(142,68,173,0.08); }
+  .phase-ADVANCED-STRENGTH { color: var(--phase-advanced); border-color: rgba(22,160,133,0.35); background: rgba(22,160,133,0.08); }
+  .phase-PEAK-CONDITIONING { color: var(--phase-peak); border-color: rgba(192,57,43,0.35); background: rgba(192,57,43,0.08); }
+  .phase-SPECIALIZATION { color: var(--phase-specialization); border-color: rgba(211,84,0,0.35); background: rgba(211,84,0,0.08); }
+  .phase-INTEGRATION { color: var(--phase-integration); border-color: rgba(39,174,96,0.35); background: rgba(39,174,96,0.08); }
+  .phase-ELITE-GRADUATION { color: var(--accent); border-color: rgba(200,168,75,0.35); background: rgba(200,168,75,0.08); }
+
+  .dot-CONDITIONING { background: var(--phase-conditioning); }
+  .dot-STRENGTH { background: var(--phase-strength); }
+  .dot-ENDURANCE { background: var(--phase-endurance); }
+  .dot-POWER { background: var(--phase-power); }
+  .dot-ADVANCED.STRENGTH { background: var(--phase-advanced); }
+  .dot-PEAK.CONDITIONING { background: var(--phase-peak); }
+  .dot-SPECIALIZATION { background: var(--phase-specialization); }
+  .dot-INTEGRATION { background: var(--phase-integration); }
+  .dot-ELITE.GRADUATION { background: var(--accent); }
+
+  @media (max-width: 768px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .bottom-grid { grid-template-columns: 1fr; }
+    .popover { width: calc(100vw - 2rem); left: 0; right: 0; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-inner">
-    <div class="logo">
-      MILFIT
-      <span>52-WEEK MILITARY CALISTHENICS PROGRAM</span>
-    </div>
-    <div class="header-status">
-      <div class="status-pill" id="programStatus">● NO START DATE SET</div>
-      <div class="status-pill" id="currentDateDisplay">—</div>
-    </div>
+  <div class="logo">
+    IRON 52
+    <span>Military Fitness Program</span>
+  </div>
+  <div class="header-right">
+    <div class="week-badge" id="header-badge">Week <strong id="header-week-num">1</strong> of 52</div>
   </div>
 </header>
 
-<div class="app-layout">
+<div class="app">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">Program Overview</div>
+    <div id="sidebar-weeks"></div>
+  </nav>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    
-    <!-- MISSION CONTROL -->
-    <div class="panel">
-      <div class="panel-title">◈ MISSION CONTROL</div>
-      <div class="control-group">
-        <label>START DATE</label>
-        <input type="date" class="date-input" id="startDateInput">
-        <div class="btn-row" style="margin-top:4px">
-          <button class="btn primary" onclick="setStartDate()">▶ DEPLOY</button>
-          <button class="btn danger" onclick="resetProgram()">✕ RESET</button>
-        </div>
-        <button class="btn" id="pauseBtn" onclick="togglePause()" style="margin-top:4px">⏸ PAUSE WEEK TIMER</button>
-      </div>
-    </div>
-
-    <!-- NAVIGATION -->
-    <div class="panel">
-      <div class="panel-title">◈ NAVIGATION</div>
-      <div class="control-group">
-        <div class="btn-row">
-          <button class="btn" onclick="navigate(-1)">◀ PREV</button>
-          <button class="btn" onclick="navigate(1)">NEXT ▶</button>
-        </div>
-        <button class="btn" onclick="openJumpModal()">⊞ JUMP TO WEEK</button>
-        <button class="btn success" onclick="goToCurrentWeek()">⊙ CURRENT WEEK</button>
-      </div>
-    </div>
-
-    <!-- WEEK OVERVIEW MAP -->
-    <div class="panel">
-      <div class="panel-title">◈ PROGRAM MAP</div>
-      <div class="week-grid" id="weekGrid"></div>
-      <div style="margin-top:0.8rem">
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-fill" id="mainProgressBar" style="width:0%"></div>
-        </div>
-        <div style="font-size:0.6rem; color:var(--text-dim); margin-top:4px; letter-spacing:0.1em">
-          PROGRAM COMPLETION: <span id="completionPct" style="color:var(--accent)">0%</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- STATS -->
-    <div class="panel">
-      <div class="panel-title">◈ MISSION STATS</div>
-      <div class="stat-row">
-        <span class="stat-label">VIEWING WEEK</span>
-        <span class="stat-value" id="statViewWeek">—</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">ACTIVE WEEK</span>
-        <span class="stat-value green" id="statActiveWeek">—</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">DAYS ELAPSED</span>
-        <span class="stat-value" id="statDaysElapsed">—</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">PAUSE DAYS</span>
-        <span class="stat-value" id="statPauseDays">0</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">WEEKS REMAINING</span>
-        <span class="stat-value" id="statWeeksLeft">52</span>
-      </div>
-    </div>
-
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <main class="main-content" id="mainContent">
-    <div class="loading-state">LOADING PROGRAM DATA...</div>
+  <main class="main" id="main-content">
+    <div class="loading"><div class="spinner"></div>Loading program...</div>
   </main>
-
 </div>
 
-<!-- JUMP MODAL -->
-<div class="modal-overlay" id="jumpModal" onclick="closeJumpModal(event)">
-  <div class="modal">
-    <div class="modal-title">⊞ JUMP TO WEEK</div>
-    <div class="jump-grid" id="jumpGrid"></div>
-    <button class="btn danger" onclick="closeJumpModalForce()">✕ CANCEL</button>
-  </div>
-</div>
-
-<!-- NOTIFICATION -->
-<div class="notif" id="notif"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-// ===== STATE =====
-let state = {
-  currentViewWeek: 1,
-  startDate: null,
-  isPaused: false,
-  pauseStartDate: null,
-  totalPausedDays: 0,
-  weekData: {},
-  programOverview: [],
-};
+  let currentWeek = 1;
+  let overview = [];
+  let activePopover = null;
 
-// Load from localStorage
-function loadState() {
-  try {
-    const saved = localStorage.getItem('milfit_state');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      state = { ...state, ...parsed };
-      if (state.startDate) state.startDate = new Date(state.startDate);
-      if (state.pauseStartDate) state.pauseStartDate = new Date(state.pauseStartDate);
+  // ── PHASE COLOR HELPER ──
+  function phaseClass(phase) {
+    return 'phase-' + phase.replace(/\s+/g, '-').toUpperCase();
+  }
+  function dotClass(phase) {
+    return 'dot-' + phase.toUpperCase();
+  }
+
+  function intensityColor(intensity) {
+    if (intensity <= 2) return '#27ae60';
+    if (intensity <= 4) return '#f39c12';
+    if (intensity <= 6) return '#e67e22';
+    if (intensity <= 8) return '#e74c3c';
+    return '#c0392b';
+  }
+
+  // ── SIDEBAR ──
+  async function loadOverview() {
+    const res = await fetch('/api/program/overview');
+    overview = await res.json();
+    renderSidebar();
+  }
+
+  function renderSidebar() {
+    const container = document.getElementById('sidebar-weeks');
+    // Group by phase
+    let lastPhase = null;
+    let html = '';
+    overview.forEach(w => {
+      if (w.phase !== lastPhase) {
+        if (lastPhase !== null) html += '</div>';
+        html += `<div class="phase-group"><div class="phase-label">${w.phase}</div>`;
+        lastPhase = w.phase;
+      }
+      const dotCls = dotClass(w.phase);
+      html += `
+        <button class="week-btn" id="sidebar-week-${w.week}" onclick="loadWeek(${w.week})">
+          <span class="week-num">W${String(w.week).padStart(2,'0')}</span>
+          <span class="week-title">${w.title}</span>
+          <span class="intensity-dot ${dotCls}" style="background:${intensityColor(w.intensity)}"></span>
+        </button>`;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function updateSidebarActive(week) {
+    document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById(`sidebar-week-${week}`);
+    if (btn) {
+      btn.classList.add('active');
+      btn.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
-  } catch(e) {}
-}
-
-function saveState() {
-  try {
-    localStorage.setItem('milfit_state', JSON.stringify(state));
-  } catch(e) {}
-}
-
-// ===== API =====
-async function fetchWeek(week) {
-  if (state.weekData[week]) return state.weekData[week];
-  const res = await fetch(`/api/week/${week}`);
-  const data = await res.json();
-  state.weekData[week] = data;
-  return data;
-}
-
-async function fetchOverview() {
-  if (state.programOverview.length) return state.programOverview;
-  const res = await fetch('/api/program/overview');
-  state.programOverview = await res.json();
-  return state.programOverview;
-}
-
-// ===== WEEK CALCULATION =====
-function getActiveWeek() {
-  if (!state.startDate) return null;
-  const now = new Date();
-  const start = new Date(state.startDate);
-  
-  let effectiveDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-  effectiveDays = Math.max(0, effectiveDays - state.totalPausedDays);
-  
-  // If currently paused, subtract ongoing pause
-  if (state.isPaused && state.pauseStartDate) {
-    const pausedOngoing = Math.floor((now - state.pauseStartDate) / (1000 * 60 * 60 * 24));
-    effectiveDays = Math.max(0, effectiveDays - pausedOngoing);
   }
-  
-  const week = Math.floor(effectiveDays / 7) + 1;
-  return Math.min(52, Math.max(1, week));
-}
 
-function getDaysElapsed() {
-  if (!state.startDate) return 0;
-  const now = new Date();
-  return Math.max(0, Math.floor((now - state.startDate) / (1000 * 60 * 60 * 24)));
-}
+  // ── LOAD WEEK ──
+  async function loadWeek(week) {
+    currentWeek = week;
+    document.getElementById('header-week-num').textContent = week;
+    updateSidebarActive(week);
+    closeAllPopovers();
 
-function getPausedDays() {
-  let total = state.totalPausedDays;
-  if (state.isPaused && state.pauseStartDate) {
-    const now = new Date();
-    total += Math.floor((now - new Date(state.pauseStartDate)) / (1000 * 60 * 60 * 24));
+    const main = document.getElementById('main-content');
+    main.innerHTML = '<div class="loading"><div class="spinner"></div>Loading week ' + week + '...</div>';
+
+    const res = await fetch(`/api/week/${week}`);
+    const data = await res.json();
+    renderWeek(data, main);
   }
-  return total;
-}
 
-// ===== CONTROLS =====
-function setStartDate() {
-  const input = document.getElementById('startDateInput').value;
-  if (!input) { showNotif('SELECT A START DATE FIRST', 'warning'); return; }
-  state.startDate = new Date(input);
-  state.isPaused = false;
-  state.pauseStartDate = null;
-  state.totalPausedDays = 0;
-  saveState();
-  
-  const activeWeek = getActiveWeek();
-  state.currentViewWeek = activeWeek || 1;
-  
-  updateUI();
-  renderWeek(state.currentViewWeek);
-  showNotif('PROGRAM DEPLOYED — MISSION STARTED', 'success');
-}
+  // ── RENDER WEEK ──
+  function renderWeek(data, container) {
+    const phaseCls = phaseClass(data.phase || '');
+    const intensity = data.intensity || 5;
 
-function resetProgram() {
-  if (!confirm('RESET ALL PROGRESS? THIS CANNOT BE UNDONE.')) return;
-  state.startDate = null;
-  state.isPaused = false;
-  state.pauseStartDate = null;
-  state.totalPausedDays = 0;
-  document.getElementById('startDateInput').value = '';
-  saveState();
-  updateUI();
-  showNotif('PROGRAM RESET', 'warning');
-}
-
-function togglePause() {
-  if (!state.startDate) { showNotif('SET A START DATE FIRST', 'warning'); return; }
-  
-  if (!state.isPaused) {
-    state.isPaused = true;
-    state.pauseStartDate = new Date();
-    document.getElementById('pauseBtn').textContent = '▶ RESUME TIMER';
-    document.getElementById('pauseBtn').classList.add('success');
-    showNotif('WEEK TIMER PAUSED', 'warning');
-  } else {
-    // Resume — accumulate paused days
-    if (state.pauseStartDate) {
-      const days = Math.floor((new Date() - new Date(state.pauseStartDate)) / (1000 * 60 * 60 * 24));
-      state.totalPausedDays += days;
+    // Intensity bar
+    let intensityBar = '';
+    for (let i = 1; i <= 10; i++) {
+      const filled = i <= intensity;
+      intensityBar += `<div class="intensity-seg" style="${filled ? `background:${intensityColor(intensity)}` : ''}"></div>`;
     }
-    state.isPaused = false;
-    state.pauseStartDate = null;
-    document.getElementById('pauseBtn').textContent = '⏸ PAUSE WEEK TIMER';
-    document.getElementById('pauseBtn').classList.remove('success');
-    showNotif('TIMER RESUMED', 'success');
-  }
-  saveState();
-  updateUI();
-}
 
-function navigate(dir) {
-  const newWeek = state.currentViewWeek + dir;
-  if (newWeek < 1 || newWeek > 52) return;
-  state.currentViewWeek = newWeek;
-  renderWeek(newWeek);
-  updateWeekGrid();
-}
+    // Exercises
+    let exerciseHTML = '';
+    (data.exercises || []).forEach((ex, idx) => {
+      const hasInstructions = ex.instructions && ex.instructions.length > 0;
+      let stepsHTML = '';
+      if (hasInstructions) {
+        ex.instructions.forEach((step, si) => {
+          stepsHTML += `<li><span class="step-num">${String(si+1).padStart(2,'0')}</span><span>${step}</span></li>`;
+        });
+      }
 
-function goToCurrentWeek() {
-  const active = getActiveWeek();
-  if (!active) { showNotif('NO ACTIVE WEEK — SET START DATE', 'warning'); return; }
-  state.currentViewWeek = active;
-  renderWeek(active);
-  updateWeekGrid();
-}
+      const videoLink = ex.video_url
+        ? `<a class="video-link" href="${ex.video_url}" target="_blank" rel="noopener">
+            <span class="video-icon"></span>Watch demo on YouTube
+           </a>`
+        : '';
 
-function openJumpModal() {
-  document.getElementById('jumpModal').classList.add('open');
-  buildJumpGrid();
-}
+      exerciseHTML += `
+        <div class="ex-card" id="ex-card-${idx}">
+          <div class="ex-icon">${ex.icon || '💪'}</div>
+          <div class="ex-info">
+            <div class="ex-name">${ex.name}</div>
+            <div class="ex-muscle">${ex.muscle || ''}</div>
+          </div>
+          <div class="ex-metrics">
+            <span class="metric-pill sets">${ex.sets} sets</span>
+            <span class="metric-pill">${ex.reps} reps</span>
+            <span class="metric-pill">rest ${ex.rest}</span>
+          </div>
+          ${hasInstructions ? `
+          <button class="info-btn" data-idx="${idx}" title="How to perform this exercise">i</button>
+          <div class="popover" id="popover-${idx}">
+            <div class="popover-header">
+              <div>
+                <div class="popover-title">${ex.name}</div>
+                <div class="popover-muscle">${ex.muscle || ''}</div>
+              </div>
+            </div>
+            <div class="popover-divider"></div>
+            <ol class="popover-steps">${stepsHTML}</ol>
+            ${videoLink}
+          </div>` : ''}
+        </div>`;
+    });
 
-function buildJumpGrid() {
-  const grid = document.getElementById('jumpGrid');
-  grid.innerHTML = '';
-  const active = getActiveWeek();
-  for (let w = 1; w <= 52; w++) {
-    const item = document.createElement('div');
-    item.className = 'jump-item' + (w === state.currentViewWeek ? ' current' : '');
-    item.textContent = w;
-    item.onclick = () => {
-      state.currentViewWeek = w;
-      renderWeek(w);
-      updateWeekGrid();
-      closeJumpModalForce();
-    };
-    grid.appendChild(item);
-  }
-}
-
-function closeJumpModal(e) {
-  if (e.target === document.getElementById('jumpModal')) closeJumpModalForce();
-}
-function closeJumpModalForce() {
-  document.getElementById('jumpModal').classList.remove('open');
-}
-
-// ===== UI UPDATES =====
-function updateUI() {
-  const active = getActiveWeek();
-  const daysElapsed = getDaysElapsed();
-  const pausedDays = getPausedDays();
-  const weeksLeft = active ? Math.max(0, 52 - active + 1) : 52;
-  const pct = active ? Math.round(((active - 1) / 52) * 100) : 0;
-
-  // Status pill
-  const statusEl = document.getElementById('programStatus');
-  if (!state.startDate) {
-    statusEl.className = 'status-pill';
-    statusEl.textContent = '● NO START DATE SET';
-  } else if (state.isPaused) {
-    statusEl.className = 'status-pill paused';
-    statusEl.textContent = '⏸ PROGRAM PAUSED';
-  } else {
-    statusEl.className = 'status-pill active';
-    statusEl.textContent = `● ACTIVE — WEEK ${active}`;
-  }
-
-  // Date display
-  const dateEl = document.getElementById('currentDateDisplay');
-  dateEl.textContent = new Date().toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'}).toUpperCase();
-
-  // Stats
-  document.getElementById('statViewWeek').textContent = state.currentViewWeek;
-  document.getElementById('statActiveWeek').textContent = active || '—';
-  document.getElementById('statDaysElapsed').textContent = state.startDate ? daysElapsed : '—';
-  document.getElementById('statPauseDays').textContent = pausedDays;
-  document.getElementById('statWeeksLeft').textContent = weeksLeft;
-
-  // Progress
-  document.getElementById('mainProgressBar').style.width = pct + '%';
-  document.getElementById('completionPct').textContent = pct + '%';
-
-  // Pause button
-  const pauseBtn = document.getElementById('pauseBtn');
-  if (state.isPaused) {
-    pauseBtn.textContent = '▶ RESUME TIMER';
-    pauseBtn.classList.add('success');
-  } else {
-    pauseBtn.textContent = '⏸ PAUSE WEEK TIMER';
-    pauseBtn.classList.remove('success');
-  }
-
-  // Start date input
-  if (state.startDate) {
-    const d = new Date(state.startDate);
-    document.getElementById('startDateInput').value = d.toISOString().split('T')[0];
-  }
-
-  updateWeekGrid();
-}
-
-function updateWeekGrid() {
-  const active = getActiveWeek();
-  const grid = document.getElementById('weekGrid');
-  grid.innerHTML = '';
-  for (let w = 1; w <= 52; w++) {
-    const dot = document.createElement('div');
-    let cls = 'week-dot';
-    if (w === state.currentViewWeek) cls += ' current';
-    else if (active && w < active) cls += ' completed';
-    if (w % 4 === 0) cls += ' deload';
-    dot.className = cls;
-    dot.textContent = w;
-    dot.title = `Week ${w}${w % 4 === 0 ? ' (DELOAD)' : ''}`;
-    dot.onclick = () => {
-      state.currentViewWeek = w;
-      renderWeek(w);
-      updateWeekGrid();
-    };
-    grid.appendChild(dot);
-  }
-}
-
-// ===== RENDER WEEK =====
-let volumeChart = null;
-
-async function renderWeek(week) {
-  const main = document.getElementById('mainContent');
-  main.innerHTML = '<div class="loading-state">LOADING WEEK ' + week + ' DATA...</div>';
-  
-  const [data, overview] = await Promise.all([fetchWeek(week), fetchOverview()]);
-  
-  const activeWeek = getActiveWeek();
-  const isCurrentActive = activeWeek === week;
-  
-  // Build exercises HTML
-  const exercisesHTML = data.exercises.map(ex => `
-    <div class="exercise-card">
-      <div class="exercise-icon">${ex.icon}</div>
-      <div>
-        <div class="exercise-name">${ex.name}</div>
-        <div class="exercise-muscle">${ex.muscle}</div>
-      </div>
-      <div class="exercise-stats">
-        <div class="ex-stat">
-          <span class="ex-stat-val">${ex.sets}</span>
-          <span class="ex-stat-label">SETS</span>
-        </div>
-        <div class="ex-stat">
-          <span class="ex-stat-val">${ex.reps}</span>
-          <span class="ex-stat-label">REPS</span>
-        </div>
-        <div class="ex-stat">
-          <span class="ex-stat-val">${ex.rest}</span>
-          <span class="ex-stat-label">REST</span>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  // Exercise visuals (ASCII-art style SVG representations)
-  const exerciseVisuals = data.exercises.slice(0, 4).map((ex, i) => `
-    <div class="exercise-photo" data-label="${ex.name.toUpperCase()}">
-      ${generateExerciseSVG(ex.name, ex.icon)}
-    </div>
-  `).join('');
-
-  // Intensity bars
-  const intBars = Array.from({length: 10}, (_, i) => {
-    const active = i < data.intensity;
-    const high = i >= 7 && active;
-    return `<div class="int-bar ${active ? 'active' : ''} ${high ? 'high' : ''}" style="height:${30 + i * 4}px"></div>`;
-  }).join('');
-
-  main.innerHTML = `
-    <div class="week-header" data-week="${String(week).padStart(2,'0')}">
-      <div class="week-badge">
-        <div class="week-num">W${String(week).padStart(2,'0')}</div>
+    container.innerHTML = `
+      <div class="week-hero">
         <div class="week-meta">
-          <span class="phase-tag">${data.phase}</span>
-          ${isCurrentActive ? '<span class="phase-tag" style="border-color:var(--green);background:rgba(39,174,96,0.15);color:var(--green);margin-top:4px">◉ YOUR CURRENT WEEK</span>' : ''}
+          <span class="tag tag-week">Week ${data.week} / 52</span>
+          <span class="tag tag-phase ${phaseCls}">${data.phase || ''}</span>
+        </div>
+        <div class="week-title-main">${data.title || ''}</div>
+        <div class="week-theme">${data.theme || ''}</div>
+        <p class="week-desc">${data.description || ''}</p>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Intensity</div>
+          <div class="stat-value">${intensity}<span style="font-size:1rem;color:var(--text3)">/10</span></div>
+          <div class="intensity-bar">${intensityBar}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Weekly Volume</div>
+          <div class="stat-value">${data.volume || 0}<span style="font-size:0.9rem;color:var(--text3)"> reps</span></div>
+          <div class="stat-sub">Total programmed volume</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Exercises</div>
+          <div class="stat-value">${(data.exercises || []).length}</div>
+          <div class="stat-sub">movements this week</div>
         </div>
       </div>
-      <div class="week-title">${data.title}</div>
-      <div class="week-theme">"${data.theme}"</div>
-      <div class="week-desc">${data.description}</div>
+
+      <div class="section-title">Exercises — click <strong style="color:var(--accent)">i</strong> for form guide</div>
+      <div class="exercise-list">${exerciseHTML}</div>
+
+      <div class="bottom-grid">
+        <div class="info-box">
+          <div class="info-box-label">Training Tip</div>
+          <p>${data.tips || '—'}</p>
+        </div>
+        <div class="info-box">
+          <div class="info-box-label">Weekly Goal</div>
+          <p>${data.weekly_goal || '—'}</p>
+        </div>
+      </div>
+
       <div class="week-nav">
-        <button class="btn" onclick="navigate(-1)" ${week === 1 ? 'disabled style="opacity:0.3"' : ''}>◀ PREVIOUS WEEK</button>
-        <button class="btn" onclick="navigate(1)" ${week === 52 ? 'disabled style="opacity:0.3"' : ''}>NEXT WEEK ▶</button>
-        ${activeWeek && activeWeek !== week ? `<button class="btn success" onclick="goToCurrentWeek()">⊙ GO TO WEEK ${activeWeek}</button>` : ''}
+        <button class="nav-btn" onclick="loadWeek(${data.week - 1})" ${data.week <= 1 ? 'disabled' : ''}>
+          ← Week ${data.week - 1}
+        </button>
+        <button class="nav-btn primary" onclick="loadWeek(${data.week + 1})" ${data.week >= 52 ? 'disabled' : ''}>
+          Week ${data.week + 1} →
+        </button>
       </div>
-    </div>
-
-    <div class="content-grid">
-      <div>
-        <div class="panel-title" style="margin-bottom:0.8rem">◈ TRAINING PROTOCOL — ${data.exercises.length} EXERCISES</div>
-        ${exercisesHTML}
-        
-        <div style="margin-top:1rem">
-          <div class="panel-title" style="margin-bottom:0.8rem">◈ EXERCISE REFERENCE</div>
-          <div class="photo-grid">${exerciseVisuals}</div>
-        </div>
-      </div>
-
-      <div class="right-panel">
-        <div class="chart-container">
-          <div class="panel-title">◈ WEEKLY VOLUME PROGRESSION</div>
-          <canvas id="volumeChart" height="160"></canvas>
-        </div>
-
-        <div class="intensity-display">
-          <div class="panel-title">◈ INTENSITY LEVEL — ${data.intensity}/10</div>
-          <div class="intensity-bars">${intBars}</div>
-        </div>
-
-        <div class="chart-container">
-          <div class="panel-title">◈ MUSCLE GROUP DISTRIBUTION</div>
-          <canvas id="muscleChart" height="180"></canvas>
-        </div>
-
-        <div class="tips-box">
-          <div class="tips-header">◈ TRAINER TIP</div>
-          <div class="tips-text">${data.tips}</div>
-        </div>
-
-        <div class="goal-box">
-          <div class="goal-header">◈ WEEKLY MISSION</div>
-          <div class="goal-text">${data.weekly_goal}</div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  // Render charts
-  renderVolumeChart(week, overview);
-  renderMuscleChart(data.exercises);
-  updateWeekGrid();
-  updateUI();
-}
-
-function generateExerciseSVG(name, icon) {
-  // Generate a simple SVG stick figure doing the exercise
-  const n = name.toLowerCase();
-  let svg = '';
-  
-  if (n.includes('push') || n.includes('plank')) {
-    svg = `<svg viewBox="0 0 80 60" style="width:70px;height:50px;opacity:0.7">
-      <circle cx="65" cy="12" r="6" fill="#c8a84b" stroke="none"/>
-      <line x1="65" y1="18" x2="65" y2="35" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="50" y1="20" x2="80" y2="20" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="65" y1="35" x2="50" y2="48" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="65" y1="35" x2="80" y2="48" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="10" y1="48" x2="80" y2="48" stroke="#2a3038" stroke-width="1"/>
-    </svg>`;
-  } else if (n.includes('squat') || n.includes('lunge')) {
-    svg = `<svg viewBox="0 0 80 70" style="width:70px;height:55px;opacity:0.7">
-      <circle cx="40" cy="10" r="7" fill="#c8a84b"/>
-      <line x1="40" y1="17" x2="40" y2="35" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="28" y1="22" x2="52" y2="22" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="40" y1="35" x2="28" y2="55" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="40" y1="35" x2="52" y2="55" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="28" y1="55" x2="22" y2="65" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="52" y1="55" x2="58" y2="65" stroke="#c8a84b" stroke-width="2.5"/>
-    </svg>`;
-  } else if (n.includes('run') || n.includes('sprint') || n.includes('burpee')) {
-    svg = `<svg viewBox="0 0 80 70" style="width:70px;height:55px;opacity:0.7">
-      <circle cx="55" cy="10" r="7" fill="#c8a84b"/>
-      <line x1="55" y1="17" x2="48" y2="35" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="35" y1="22" x2="58" y2="18" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="48" y1="35" x2="35" y2="55" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="48" y1="35" x2="60" y2="50" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="35" y1="55" x2="25" y2="65" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="60" y1="50" x2="68" y2="62" stroke="#c8a84b" stroke-width="2.5"/>
-    </svg>`;
-  } else {
-    svg = `<svg viewBox="0 0 80 70" style="width:70px;height:55px;opacity:0.7">
-      <circle cx="40" cy="8" r="7" fill="#c8a84b"/>
-      <line x1="40" y1="15" x2="40" y2="40" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="25" y1="22" x2="55" y2="22" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="40" y1="40" x2="30" y2="60" stroke="#c8a84b" stroke-width="2.5"/>
-      <line x1="40" y1="40" x2="50" y2="60" stroke="#c8a84b" stroke-width="2.5"/>
-    </svg>`;
+    `;
   }
-  return svg + `<span style="font-size:1.8rem">${icon}</span>`;
-}
 
-function renderVolumeChart(currentWeek, overview) {
-  const ctx = document.getElementById('volumeChart');
-  if (!ctx) return;
+  // ── POPOVER TOGGLE ──
+  function closeAllPopovers() {
+    document.querySelectorAll('.popover.open').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.info-btn.active').forEach(b => b.classList.remove('active'));
+    activePopover = null;
+  }
 
-  if (volumeChart) volumeChart.destroy();
+  // Use event delegation on the document — avoids inline handler bugs
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.info-btn');
+    if (btn) {
+      e.stopPropagation();
+      const idx = btn.dataset.idx;
+      const popover = document.getElementById(`popover-${idx}`);
+      if (!popover) return;
 
-  const start = Math.max(1, currentWeek - 6);
-  const end = Math.min(52, currentWeek + 5);
-  const weeks = overview.slice(start - 1, end);
+      const isOpen = popover.classList.contains('open');
+      closeAllPopovers();
 
-  volumeChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: weeks.map(w => `W${w.week}`),
-      datasets: [{
-        label: 'Volume',
-        data: weeks.map(w => w.volume),
-        backgroundColor: weeks.map(w => w.week === currentWeek ? 'rgba(200,168,75,0.9)' : 'rgba(200,168,75,0.25)'),
-        borderColor: weeks.map(w => w.week === currentWeek ? '#c8a84b' : 'rgba(200,168,75,0.4)'),
-        borderWidth: 1,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#181c1f', titleColor: '#c8a84b', bodyColor: '#d4d8dc', borderColor: '#2a3038', borderWidth: 1 } },
-      scales: {
-        x: { ticks: { color: '#6b7580', font: { family: 'Share Tech Mono', size: 9 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
-        y: { ticks: { color: '#6b7580', font: { family: 'Share Tech Mono', size: 9 } }, grid: { color: 'rgba(255,255,255,0.04)' } }
+      if (!isOpen) {
+        popover.classList.add('open');
+        btn.classList.add('active');
+        activePopover = idx;
+
+        // Adjust if popover goes off right edge
+        requestAnimationFrame(() => {
+          const rect = popover.getBoundingClientRect();
+          if (rect.right > window.innerWidth - 16) {
+            popover.style.left = 'auto';
+            popover.style.right = '0';
+          } else {
+            popover.style.left = '';
+            popover.style.right = '';
+          }
+        });
       }
+      return;
+    }
+
+    // Click outside any popover → close all
+    if (!e.target.closest('.popover')) {
+      closeAllPopovers();
     }
   });
-}
 
-function renderMuscleChart(exercises) {
-  const ctx = document.getElementById('muscleChart');
-  if (!ctx) return;
-
-  const groups = { 'CHEST': 0, 'LEGS': 0, 'CORE': 0, 'BACK': 0, 'SHOULDERS': 0, 'CARDIO': 0 };
-  exercises.forEach(ex => {
-    const m = ex.muscle.toUpperCase();
-    if (m.includes('CHEST') || m.includes('PUSH') || m.includes('TRICEP')) groups.CHEST++;
-    if (m.includes('LEG') || m.includes('QUAD') || m.includes('GLUTE') || m.includes('SQUAT') || m.includes('LUNGE')) groups.LEGS++;
-    if (m.includes('CORE') || m.includes('ABS') || m.includes('PLANK') || m.includes('SIT')) groups.CORE++;
-    if (m.includes('BACK') || m.includes('ROW') || m.includes('PULL') || m.includes('BICEP')) groups.BACK++;
-    if (m.includes('SHOULDER') || m.includes('DELT') || m.includes('PRESS')) groups.SHOULDERS++;
-    if (m.includes('CARDIO') || m.includes('RUN') || m.includes('SPRINT') || m.includes('FULL BODY')) groups.CARDIO++;
+  // Close popovers on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAllPopovers();
   });
 
-  const labels = Object.keys(groups).filter(k => groups[k] > 0);
-  const values = labels.map(k => groups[k]);
+  // ── INIT ──
+  async function init() {
+    await loadOverview();
+    await loadWeek(1);
+  }
 
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels,
-      datasets: [{
-        data: values,
-        backgroundColor: ['rgba(200,168,75,0.8)', 'rgba(39,174,96,0.8)', 'rgba(52,152,219,0.8)', 'rgba(155,89,182,0.8)', 'rgba(231,76,60,0.8)', 'rgba(230,126,34,0.8)'],
-        borderColor: '#0a0c0e',
-        borderWidth: 2,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'bottom', labels: { color: '#6b7580', font: { family: 'Share Tech Mono', size: 8 }, padding: 8, boxWidth: 10 } },
-        tooltip: { backgroundColor: '#181c1f', titleColor: '#c8a84b', bodyColor: '#d4d8dc' }
-      }
-    }
-  });
-}
-
-// ===== NOTIFICATION =====
-let notifTimer;
-function showNotif(msg, type = 'warning') {
-  const el = document.getElementById('notif');
-  el.textContent = msg;
-  el.className = `notif ${type} show`;
-  clearTimeout(notifTimer);
-  notifTimer = setTimeout(() => el.classList.remove('show'), 3000);
-}
-
-// ===== INIT =====
-async function init() {
-  loadState();
-  await fetchOverview();
-  updateUI();
-  
-  // Set default view to active week or week 1
-  const active = getActiveWeek();
-  state.currentViewWeek = active || state.currentViewWeek || 1;
-  
-  renderWeek(state.currentViewWeek);
-  
-  // Update time every minute
-  setInterval(() => {
-    updateUI();
-  }, 60000);
-}
-
-init();
+  init();
 </script>
 </body>
 </html>
